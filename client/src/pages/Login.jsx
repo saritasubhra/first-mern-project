@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const URL = "http://localhost:8000/api/v1/auth/login";
 
 function Login() {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     setUser({
@@ -13,9 +17,28 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      const res = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      // const data = await res.json();
+
+      if (res.ok) {
+        setUser({
+          email: "",
+          password: "",
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -32,7 +55,6 @@ function Login() {
               />
             </div>
 
-            {/* let tackle registration form  */}
             <div className="registration-form">
               <h1 className="main-heading mb-3">login form</h1>
               <br />
@@ -68,7 +90,7 @@ function Login() {
 
                 <br />
                 <button type="submit" className="btn btn-submit">
-                  Register Now
+                  Log in
                 </button>
               </form>
             </div>
