@@ -1,3 +1,5 @@
+import { Analytics } from "../components/Analytics";
+
 function Home() {
   return (
     <>
@@ -35,6 +37,8 @@ function Home() {
           </div>
         </section>
       </main>
+
+      <Analytics />
 
       <section className="section-hero">
         <div className="container grid grid-two-cols">
