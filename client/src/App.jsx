@@ -11,6 +11,7 @@ import PageNotFound from "./pages/PageNotFound";
 import AdminLayout from "./components/AdminLayout";
 import AdminUsers from "./pages/AdminUsers";
 import AdminContacts from "./pages/AdminContacts";
+import UserUpdate from "./pages/UserUpdate";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="users" element={<AdminUsers />} />
+          <Route path="users/:id" element={<UserUpdate />} />
           <Route path="contacts" element={<AdminContacts />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

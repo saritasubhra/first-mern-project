@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
+import { toast } from "react-toastify";
 
 const URL = "http://localhost:8000/api/v1/auth/signup";
 
@@ -34,18 +35,19 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("merntoken", data.token);
-        setToken(data.token);
-        setUser({
-          fullname: "",
-          email: "",
-          password: "",
-          passwordConfirm: "",
-        });
-        navigate("/");
+        return toast.error(data.message);
       }
+      localStorage.setItem("merntoken", data.token);
+      setToken(data.token);
+      setUser({
+        fullname: "",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+      });
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 

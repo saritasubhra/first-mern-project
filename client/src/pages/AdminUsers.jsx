@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/authContext";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const URL = "http://localhost:8000/api/v1/users";
 
@@ -33,6 +34,25 @@ function AdminUsers() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  async function handleUserDelete(id) {
+    try {
+      const res = await fetch(`${URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return toast.error(data.message);
+      }
+      fetchAllUsers();
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   if (!users.length) return;
 
   return (
@@ -52,14 +72,20 @@ function AdminUsers() {
             </tr>
           </thead>
           <tbody>
-            {users.map((curUser, index) => {
+            {users.map((user, index) => {
               return (
                 <tr key={index}>
-                  <td>{curUser.fullname}</td>
-                  <td>{curUser.email}</td>
-                  <td>{curUser.email}</td>
-                  <td>Edit</td>
-                  <td>Delete</td>
+                  <td>{user.fullname}</td>
+                  <td>{user.email}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <Link to={`/admin/users/${user._id}`}>Edit</Link>
+                  </td>
+                  <td>
+                    <button onClick={() => handleUserDelete(user._id)}>
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               );
             })}

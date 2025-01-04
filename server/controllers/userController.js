@@ -19,6 +19,23 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next(new AppError("No user found with that ID", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -31,4 +48,20 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUsers, deleteUser };
+const updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      message: "Updated successfully",
+      user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllUsers, deleteUser, updateUser, getUser };

@@ -33,21 +33,41 @@ function AdminContacts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  async function handleContactDelete(id) {
+    try {
+      const res = await fetch(`${URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return toast.error(data.message);
+      }
+      fetchAllContacts();
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   if (!contacts.length) return;
+
   return (
     <section className="admin-contacts-section">
       <h1>Admin Contact Data </h1>
 
       <div className="container  admin-users">
-        {contacts.map((curContactData, index) => {
-          const { fullname, email, message } = curContactData;
+        {contacts.map((contact, index) => {
+          const { fullname, email, message, _id } = contact;
 
           return (
             <div key={index}>
               <p>{fullname}</p>
               <p>{email}</p>
               <p>{message}</p>
-              <button>delete</button>
+              <button onClick={() => handleContactDelete(_id)}>delete</button>
             </div>
           );
         })}
