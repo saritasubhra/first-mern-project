@@ -10,7 +10,7 @@ function Service() {
     async function fetchServices() {
       try {
         const res = await fetch(URL, {
-          method: "GE",
+          method: "GET",
         });
         const data = await res.json();
         setServices(data.data);
