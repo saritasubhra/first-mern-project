@@ -80,4 +80,13 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, logIn, protect };
+const restrictToAdmin = async (req, res, next) => {
+  const { isAdmin } = req.user;
+
+  if (!isAdmin) {
+    return next(new AppError("Access denied.", 403));
+  }
+  next();
+};
+
+module.exports = { signUp, logIn, protect, restrictToAdmin };

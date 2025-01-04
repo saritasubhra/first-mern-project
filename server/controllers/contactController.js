@@ -1,4 +1,5 @@
 const Contact = require("../models/contactModel");
+const AppError = require("../utils/appError");
 
 const createContact = async (req, res, next) => {
   try {
@@ -15,4 +16,34 @@ const createContact = async (req, res, next) => {
   }
 };
 
-module.exports = createContact;
+const getAllContacts = async (req, res, next) => {
+  try {
+    const contacts = await Contact.find();
+
+    if (!contacts) {
+      return next(new AppError("No contacts found", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      results: contacts.length,
+      data: contacts,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteContact = async (req, res, next) => {
+  try {
+    await Contact.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      status: "success",
+      message: "Deleted successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createContact, getAllContacts, deleteContact };

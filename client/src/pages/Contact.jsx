@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const URL = "http://localhost:8000/api/v1/contact";
+const URL = "http://localhost:8000/api/v1/contacts";
 function Contact() {
   const [contact, setContact] = useState({
     fullname: "",

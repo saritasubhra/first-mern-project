@@ -8,6 +8,7 @@ const AppError = require("./utils/appError");
 const authRouter = require("./routes/authRoutes");
 const contactRouter = require("./routes/contactRoutes");
 const serviceRouter = require("./routes/serviceRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const port = process.env.PORT || 3000;
 const DB = process.env.DB_URL;
@@ -29,8 +30,9 @@ mongoose
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/contact", contactRouter);
+app.use("/api/v1/contacts", contactRouter);
 app.use("/api/v1/services", serviceRouter);
+app.use("/api/v1/users", userRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`This route ${req.originalUrl} doesn't exist.`, 404));

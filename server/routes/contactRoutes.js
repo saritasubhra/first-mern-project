@@ -1,8 +1,17 @@
 const express = require("express");
-const createContact = require("../controllers/contactController");
+const {
+  createContact,
+  getAllContacts,
+  deleteContact,
+} = require("../controllers/contactController");
+const { protect, restrictToAdmin } = require("../controllers/authController");
 
 const router = express.Router();
 
-router.post("/", createContact);
+router
+  .route("/")
+  .get(protect, restrictToAdmin, getAllContacts)
+  .post(createContact);
+router.route("/:id").delete(protect, restrictToAdmin, deleteContact);
 
 module.exports = router;
